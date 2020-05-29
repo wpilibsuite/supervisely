@@ -1,0 +1,5 @@
+{
+	"title": "WPILib TF Object Detection",
+	"description": "Adapted version of The TensorFlow Object Detection Library. Only model graphs are taken from original repo. We keep all things as simple as possible.",
+	"type": "architecture"
+}

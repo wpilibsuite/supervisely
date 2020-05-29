@@ -1,0 +1,168 @@
+[
+  {
+    "title": "train-ssd",
+    "type": "train",
+    "config": {
+      "lr": 0.001,
+      "epochs": 5,
+      "val_every": 0.5,
+      "batch_size": {
+        "train": 4,
+        "val": 4
+      },
+      "input_size": {
+        "width": 256,
+        "height": 256
+      },
+      "gpu_devices": [
+        0
+      ],
+      "dataset_tags": {
+        "val": "val",
+        "train": "train"
+      },
+      "weights_init_type": "transfer_learning"
+    }
+  },
+  {
+    "title": "train-faster",
+    "type": "train",
+    "config": {
+      "lr": 0.0001,
+      "epochs": 5,
+      "val_every": 0.5,
+      "batch_size": {
+        "val": 4,
+        "train": 4
+      },
+      "input_size": {
+        "width": 256,
+        "height": 256
+      },
+      "gpu_devices": [
+        0
+      ],
+      "dataset_tags": {
+        "val": "val",
+        "train": "train"
+      },
+      "weights_init_type": "transfer_learning"
+    }
+  },
+  {
+    "title": "full_image",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0,
+        "confidence_tag_name": "confidence"
+      },
+      "mode": {
+        "name": "full_image",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
+        }
+      }
+    }
+  },
+  {
+    "title": "roi",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0,
+        "confidence_tag_name": "confidence"
+      },
+      "mode": {
+        "name": "roi",
+        "bounds": {
+          "left": "10%",
+          "top": "30%",
+          "right": "10%",
+          "bottom": "10%"
+        },
+        "save": false,
+        "class_name": "inference_roi",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
+        }
+      }
+    }
+  },
+  {
+    "title": "objects",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0,
+        "confidence_tag_name": "confidence"
+      },
+      "mode": {
+        "name": "bboxes",
+        "from_classes": "__all__",
+        "padding": {
+          "left": "10px",
+          "top": "10px",
+          "right": "10px",
+          "bottom": "10px"
+        },
+        "save": false,
+        "add_suffix": "_input_bbox",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
+        }
+      }
+    }
+  },
+  {
+    "title": "sliding_window_det",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0,
+        "confidence_tag_name": "confidence"
+      },
+      "mode": {
+        "name": "sliding_window_det",
+        "window": {
+          "width": 128,
+          "height": 128
+        },
+        "min_overlap": {
+          "x": 10,
+          "y": 10
+        },
+        "save": false,
+        "class_name": "sl_window",
+        "nms_after": {
+          "enable": true,
+          "iou_threshold": 0.4,
+          "confidence_tag_name": "confidence"
+        },
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
+        }
+      }
+    }
+  }
+]

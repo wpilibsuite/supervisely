@@ -1,0 +1,224 @@
+{
+  "definitions": {
+    "nonempty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "positive_int": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nonnegative_int": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_float": {
+      "type": "number",
+      "minimum": 0,
+      "exclusiveMinimum": true
+    },
+    "nonnegative_float": {
+      "type": "number",
+      "minimum": 0
+    },
+    "positive_size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "$ref": "#/definitions/positive_int"
+        },
+        "height": {
+          "$ref": "#/definitions/positive_int"
+        }
+      }
+    },
+    "gpu_devices_list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/nonnegative_int"
+      },
+      "minItems": 1
+    }
+  },
+  "training_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "dataset_tags",
+      "batch_size",
+      "input_size",
+      "epochs",
+      "val_every",
+      "lr",
+      "weights_init_type",
+      "gpu_devices"
+    ],
+    "properties": {
+      "dataset_tags": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/nonempty_string"
+          },
+          "val": {
+            "$ref": "#/definitions/nonempty_string"
+          }
+        }
+      },
+      "batch_size": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/positive_int"
+          },
+          "val": {
+            "$ref": "#/definitions/positive_int"
+          }
+        }
+      },
+      "validate_with_model_eval": {
+        "type": "boolean"
+      },
+      "input_size": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/positive_size"
+          }
+        ]
+      },
+      "epochs": {
+        "$ref": "#/definitions/positive_int"
+      },
+      "val_every": {
+        "$ref": "#/definitions/positive_float"
+      },
+      "lr": {
+        "$ref": "#/definitions/positive_float"
+      },
+      "weights_init_type": {
+        "type": "string",
+        "enum": [
+          "transfer_learning",
+          "continue_training"
+        ]
+      },
+      "gpu_devices": {
+        "$ref": "#/definitions/gpu_devices_list"
+      },
+      "model_configuration": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "architecture",
+              "backbone"
+            ],
+            "properties": {
+              "architecture": {
+                "type": "string",
+                "enum": [
+                  "ssd"
+                ]
+              },
+              "backbone": {
+                "type": "string",
+                "enum": [
+                  "mobilenet_v2",
+                  "mobilenet_v1",
+                  "inception_v2",
+                  "lite_mobilenet_v2"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "architecture",
+              "backbone"
+            ],
+            "properties": {
+              "architecture": {
+                "type": "string",
+                "enum": [
+                  "faster_rcnn"
+                ]
+              },
+              "backbone": {
+                "type": "string",
+                "enum": [
+                  "nasnet",
+                  "resnet50",
+                  "resnet101",
+                  "inception_v2",
+                  "inception_resnet_v2"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "architecture",
+              "backbone"
+            ],
+            "properties": {
+              "architecture": {
+                "type": "string",
+                "enum": [
+                  "rfcn"
+                ]
+              },
+              "backbone": {
+                "type": "string",
+                "enum": [
+                  "resnet101"
+                ]
+              }
+            }
+          }
+         ]
+      }
+    }
+  },
+  "inference_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "gpu_device"
+    ],
+    "properties": {
+      "gpu_device": {
+        "$ref": "#/definitions/nonnegative_int"
+      },
+      "confidence_tag_name": {
+        "type": "string"
+      },
+      "min_confidence_threshold": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/positive_float"
+          },
+          {
+            "maximum": 1
+          }
+        ]
+      }
+    }
+  }
+}
