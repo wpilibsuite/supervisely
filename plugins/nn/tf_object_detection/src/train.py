@@ -19,7 +19,7 @@ from supervisely_lib.nn.hosted.trainer import SuperviselyModelTrainer
 from tf_config_converter import load_sample_config, save_config, determine_tf_config
 
 import config as config_lib
-from object_detection.custom_train import train
+import custom_train as train
 
 
 class ObjectDetectionTrainer(SuperviselyModelTrainer):
