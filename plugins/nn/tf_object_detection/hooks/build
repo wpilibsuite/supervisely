@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#
+# Build hook for Docker Automated Build.
+#
+
+MODES_ARR=()
+for mode in main train inference deploy deploy_smart; do
+	[[ -f "src/${mode}.py" ]] && MODES_ARR+=( ${mode} )
+done
+MODES=${MODES_ARR[@]}
+
+function get_file_content () {
+	[[ -f "$1" ]] && echo $(base64 $1 | tr -d \\n) || echo ""
+}
+
+docker build \
+	--label "VERSION=$IMAGE_NAME" \
+	--label "INFO=$(get_file_content "plugin_info.json")" \
+	--label "MODES=$MODES" \
+	--label "README=$(get_file_content "README.md")" \
+	--label "CONFIGS=$(get_file_content "predefined_run_configs.json")" \
+	-f $DOCKERFILE_PATH \
+	-t $IMAGE_NAME \
+	.

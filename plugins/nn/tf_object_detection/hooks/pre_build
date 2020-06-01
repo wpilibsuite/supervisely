@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#
+# Pre build hook for Docker Automated Build.
+#
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u # Treat unset variables as an error.
+
+cp -r ../../../supervisely_lib .
+
+git clone https://github.com/tensorflow/models.git src/models && git -C src/models checkout fe748d4a4a1576b57c279014ac0ceb47344399c4
+
+echo "pre_build hook terminated successfully."
